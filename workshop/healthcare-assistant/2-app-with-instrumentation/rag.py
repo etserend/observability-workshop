@@ -7,7 +7,8 @@ from langchain_classic.chains import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.tools import tool
-from config import DOMAIN, load_config, create_chat_llm, create_embeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from config import DOMAIN, load_config
 from helpers.pgvector_utils import collection_exists, create_pgvector_store
 from setup_env import setup_environment
 
@@ -56,11 +57,11 @@ class HealthcareRAGSystem:
                     f"Please run: python helpers/setup_vectordb.py {environment}"
                 )
 
-            embeddings = create_embeddings(model=embedding_model)
+            embeddings = OpenAIEmbeddings(model=embedding_model)
             vector_store, _ = create_pgvector_store(embeddings, DOMAIN, environment)
             retriever = vector_store.as_retriever(search_kwargs={"k": self.top_k})
 
-            llm = create_chat_llm(model=llm_model, temperature=0.1, name="Healthcare RAG Assistant")
+            llm = ChatOpenAI(model=llm_model, temperature=0.1, name="Healthcare RAG Assistant")
 
             retrieval_qa_chat_prompt = ChatPromptTemplate.from_messages(
                 [

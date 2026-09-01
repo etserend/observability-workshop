@@ -8,12 +8,13 @@ from typing import Annotated, List, Dict, Optional, TypedDict
 
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langchain_core.tools import StructuredTool
+from langchain_openai import ChatOpenAI
 from langgraph.graph import START, StateGraph
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from config import TOOLS_DIR, load_config, load_system_prompt, create_chat_llm
+from config import TOOLS_DIR, load_config, load_system_prompt
 from rag import create_rag_tool
 from tools import logic as tools_logic
 
@@ -104,7 +105,7 @@ class HealthcareAgent:
         )
         temperature = model_config.get("temperature", 0.1)
 
-        llm_with_tools = create_chat_llm(
+        llm_with_tools = ChatOpenAI(
             model=effective_model,
             temperature=temperature,
             name="Healthcare Assistant",

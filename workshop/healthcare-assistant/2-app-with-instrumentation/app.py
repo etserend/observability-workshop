@@ -1,6 +1,11 @@
 """Healthcare assistant Streamlit app."""
+import logging
 import os
 import uuid
+
+logging.basicConfig(level=logging.DEBUG, format="%(name)s - %(levelname)s - %(message)s")
+logging.getLogger("splunk_ao").setLevel(logging.DEBUG)
+logging.getLogger("splunk_ao.exporter").setLevel(logging.DEBUG)
 
 import streamlit as st
 from dotenv import load_dotenv
